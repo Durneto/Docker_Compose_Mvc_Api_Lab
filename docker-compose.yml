@@ -1,0 +1,24 @@
+version: "3"
+networks:
+  rede_web:
+services:
+  backend:
+    container_name: app
+    build: ./Backend/
+    ports:
+      - 5000:80
+    networks:
+      - rede_web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+  frontend:
+    container_name: web
+    build: ./Frontend/
+    ports:
+      - 80:80
+    networks:
+      - rede_web
+    depends_on:
+      - backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
