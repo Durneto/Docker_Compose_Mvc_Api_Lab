@@ -10,7 +10,7 @@ services:
     networks:
       - rede_web
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
   frontend:
     container_name: web
     build: ./Frontend/
@@ -21,4 +21,4 @@ services:
     depends_on:
       - backend
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production

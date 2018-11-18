@@ -1,16 +1,16 @@
 ﻿@{
-    ViewData["Title"] = "About";
+    ViewData["Title"] = "Teste da API";
 }
 <h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<p>Use this area to provide additional information.</p>
-
-<div class="col-md-3">
-    <table>
-        <tr>
-            <td><h1>Resultado: </h1></td>
-            <td><h1>@ViewBag.Result</h1></td>
-        </tr>
-    </table>
+<div class="row">
+    <div class="col-md-3">
+        <p>Resultado da consulta à API</p>
+        <table class="table table-bordered table-hover">
+            @foreach (var item in ViewBag.Result)
+            {
+                <tr><td class="text-success">@item</td></tr>
+            }
+        </table>
+    </div>
 </div>

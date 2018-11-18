@@ -1,17 +1,22 @@
-﻿using System;
+﻿using Frontend.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Frontend.Models;
 using System.Net.Http;
 
 namespace Frontend.Controllers
 {
     public class HomeController : Controller
     {
-        static HttpClient client = new HttpClient();
+        IConfiguration _configuration;
+
+        public HomeController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         public IActionResult Index()
         {
@@ -21,15 +26,25 @@ namespace Frontend.Controllers
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
+			ViewBag.Result = "Teste";
 
-            HttpResponseMessage response = client.GetAsync("http://backend:5000/api/values").Result;
+            try
+            {
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = client.GetAsync(_configuration["Urls:Api"]).Result;
 
-            if (response.IsSuccessStatusCode)
-                ViewBag.Result = response.Content.ReadAsStringAsync().Result;
-            else
-                ViewBag.Result = response.StatusCode;
-
-
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    ViewBag.Result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(result);
+                }
+                else
+                    ViewBag.Result = response.StatusCode;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Result = $"Deu ruim: Erro:[{ex.ToString()}]";
+            }
 
             return View();
         }
